@@ -1,0 +1,42 @@
+---
+name: "pre-release"
+
+on:
+  push:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+# Allow this job to clone the repo and create a page deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  pre-release:
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: Set timezone
+        uses: szenius/set-timezone@v2.0
+        with:
+          timezoneLinux: "Europe/Warsaw"
+
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4
+
+      - name: Generate FOO unique variable based on timestamp
+        run: |
+          cd dist
+          zip -r eucentral.zip .
+
+          echo FOO=$(date +%Y-%m-%d_%H_%M) >> $GITHUB_ENV
+
+      - name: "Pre release"
+        uses: softprops/action-gh-release@v2
+        with:
+          make_latest: true
+          tag_name: ${{ env.FOO }}
+          token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
+          files: |
+            dist/eucentral.zip
