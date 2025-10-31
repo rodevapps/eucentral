@@ -40,3 +40,23 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
           files: |
             dist/eucentral.zip
+
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "New Release: ${{ github.event.release.name }}"
+          to: work.opiela@gmail.com
+          from: rafal.opiela@gmail.com
+          body: |
+            A new release has been published!
+
+            Repository: ${{ github.repository }}
+            Release: ${{ github.event.release.name }}
+            Description:
+            ${{ github.event.release.body }}
+
+            View it here: ${{ github.event.release.html_url }}
