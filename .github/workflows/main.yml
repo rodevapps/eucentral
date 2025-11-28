@@ -28,7 +28,7 @@ jobs:
       - name: Generate FOO unique variable based on timestamp
         run: |
           cd dist
-          sed -i "s/DEVDEV/prod-$(date +%Y-%M-%d_%H:%M)-${{ github.sha }}/g" index.html
+          sed -i "s/DEVDEV/prod-$(date +%Y-%m-%d_%H:%M)-${{ github.run_id }}/g" index.html
           zip -r eucentral.zip .
 
           echo FOO=$(date +%Y-%m-%d_%H_%M) >> $GITHUB_ENV
