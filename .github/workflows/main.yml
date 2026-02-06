@@ -29,7 +29,7 @@ jobs:
         run: |
           cd dist
 
-          for i in $(find . -name "*.html" -tyep f)
+          for i in $(find . -name "*.html" -type f)
           do
             sed -i "s/DEVDEV/prod-$(date +%Y-%m-%d_%H:%M)-${{ github.run_id }}/g" ${i}
           done
